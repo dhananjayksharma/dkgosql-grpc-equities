@@ -1,0 +1,41 @@
+Project:
+cd /mnt/hdd414GB/dkgosqlgRPCLive2022/dkgosql-grpc-equities
+
+
+REPOS:
+cd /mnt/hdd414GB/github-dkgosql-dhananjayksharma/dkgosql-grpc-equities
+
+
+sudo apt install protobuf-compiler
+
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+
+go mod init github.com/dhananjayksharma/dkgosql-grpc-equities
+
+
+folder:
+    dkgosql-grpc-notes
+        notes/
+        go.mod
+
+        
+        /*NOTES: run this into  dkgosql-grpc-equities */
+        protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative equities/equities.proto  
+
+
+
+https://speedscale.com/using-grpc-with-golang/
+
+
+
+go run notes_client/main.go save -title test -id 123 -content "Lorem ipsum dolor sit amet, consectetur "
+go run notes_client/main.go save -title wetogether -id 1234 -content "Lorem ipsum dolor sit amet, consectetur "
+go run notes_client/main.go save -title mydates -id 1235 -content "I was looking for a relationship on a famous dating app. I met a nice guy there, and we arranged"
+go run notes_client/main.go load -keyword Lorem
+
+
+go run notes_client/main.go save -l -title mydates -id s199 -content "its a stream data I was looking for a relationship on a famous dating app. I met a nice guy there, and we arranged"
+
