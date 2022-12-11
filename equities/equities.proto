@@ -1,0 +1,23 @@
+syntax = "proto3";
+package equities;
+
+option go_package = "github.com/dhananjayksharma/dkgosql-grpc-equities;equities";
+
+
+
+// The order service definition.
+service Order {
+    // Sends a order
+    rpc ProcessOrder (stream OrderRequest) returns (stream OrderResponse) {}
+  }
+
+message OrderRequest {
+    string userid = 1;
+    string orderid = 2; 
+  }
+
+  message OrderResponse {
+    string userid = 1;
+    string orderid = 2;
+    bool status = 3;
+  }
