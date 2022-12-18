@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"time"
 
 	"github.com/dhananjayksharma/dkgosql-grpc-equities/equities"
 	"github.com/google/uuid"
@@ -20,25 +19,18 @@ var (
 
 func main() {
 	flag.Parse()
-	// Set up a connection to the server.
-	// TODO
-	// Set up a connection to the server.
 	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := equities.NewOrderClient(conn)
+	client := equities.NewOrderClient(conn)
 
-	// Define the context
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	stream, err := c.ProcessOrder(ctx)
+	stream, err := client.ProcessOrder(context.Background())
 
 	if err != nil {
 		log.Fatalln("Opening stream", err)
 	}
-
 	for i := 0; i < 10; i++ {
 		orderid := uuid.New()
 		userid := uuid.New()
@@ -55,13 +47,14 @@ func main() {
 	}
 
 	for {
-		_, err := stream.Recv()
+		readRow, err := stream.Recv()
 		if err == io.EOF {
-			break
+			return
 		}
 		if err != nil {
 			log.Fatalln("Recv", err)
 		}
-		fmt.Println("Processed GetUserid, GetOrderid")
+		fmt.Printf("Processed GetUserid:%s, GetOrderid:%s, Status:%t, Time: %v\n", readRow.GetUserid(), readRow.GetOrderid(), readRow.GetStatus(), readRow.GetNewupdateddt())
 	}
+
 }

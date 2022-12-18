@@ -1,5 +1,6 @@
 syntax = "proto3";
 package equities;
+ 
 
 option go_package = "github.com/dhananjayksharma/dkgosql-grpc-equities;equities";
 
@@ -9,7 +10,18 @@ option go_package = "github.com/dhananjayksharma/dkgosql-grpc-equities;equities"
 service Order {
     // Sends a order
     rpc ProcessOrder (stream OrderRequest) returns (stream OrderResponse) {}
+    rpc GetOrderListByUserID (stream OrderListRequest) returns (stream OrderListResponse) {}
   }
+
+message OrderListRequest{
+  string userid = 1;
+}
+message OrderListResponse{
+  string userid = 1;
+  string orderid = 2;
+  int32 status = 3;
+}
+
 
 message OrderRequest {
     string userid = 1;
@@ -20,4 +32,5 @@ message OrderRequest {
     string userid = 1;
     string orderid = 2;
     bool status = 3;
+    string newupdateddt = 4; 
   }
