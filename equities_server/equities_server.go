@@ -6,8 +6,9 @@ import (
 	"io"
 	"log"
 	"net"
+	"time"
 
-	equities "github.com/dhananjayksharma/dkgosql-grpc-equities/equities"
+	gRPGEquities "github.com/dhananjayksharma/dkgosql-grpc-equities/equities"
 	"google.golang.org/grpc"
 )
 
@@ -17,31 +18,51 @@ var (
 
 // Implement the equities service (equities.equitiesServer interface)
 type equitiesServer struct {
-	equities.UnimplementedOrderServer
+	gRPGEquities.UnimplementedOrderServer
 }
 
-func (es *equitiesServer) ProcessOrder(stream equities.Order_ProcessOrderServer) error {
+func (es *equitiesServer) ProcessOrder(stream gRPGEquities.Order_ProcessOrderServer) error {
+	ctx := stream.Context()
 	for {
-		// Get order for userid
-		order, err := stream.Recv()
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
 
+		// Reading stream Request
+		order, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
+			log.Printf("ProcessOrder receive error %v", err)
 			return err
 		}
 
-		log.Printf("Received a order to process: %v", order)
-		err = equities.ProcessOrder(&equities.OrderRequest{
+		// log.Printf("Received a order to process: %v", order)
+		request := &gRPGEquities.OrderRequest{
 			Userid:  order.Userid,
 			Orderid: order.Orderid,
-		})
+		}
 
+		status, err := gRPGEquities.ProcessOrder(request)
+		response := &gRPGEquities.OrderResponse{
+			Orderid:      request.Orderid,
+			Userid:       request.Userid,
+			Status:       status,
+			Newupdateddt: time.Now().String(),
+		}
+		fmt.Println("Sending Response:", response)
+
+		// Sending stream Reponse
+		if err := stream.Send(response); err != nil {
+			log.Printf("send error %v", err)
+		}
 		if err != nil {
+			log.Printf("SERVER: error calling equities.ProcessOrder:  error %v", err)
 			return err
 		}
-		log.Println("order: ", order)
 	}
 	return nil
 }
@@ -58,7 +79,7 @@ func main() {
 	// Instantiate the server
 	s := grpc.NewServer()
 	// Register server method (actions the server will do)
-	equities.RegisterOrderServer(s, &equitiesServer{})
+	gRPGEquities.RegisterOrderServer(s, &equitiesServer{})
 	// Register server method (actions the server will do)
 	// TODO
 

@@ -1,0 +1,35 @@
+
+
+1. import database
+    BSE_Equity_Db.sql
+
+2. export vars to connect config-local
+
+    export MICROSERVICECDEMONEWAPI=local
+    echo $MICROSERVICECDEMONEWAPI
+
+3. make mod for dependencies into folder these folders
+    ./dkgosql-grpc-equities
+        go mod tidy
+
+    grpcequitiesapi/
+        go mod tidy
+    
+        set password in config:
+        config-local.yml
+
+4. run api server
+    grpcequitiesapi/
+        go run main.go
+
+5. run api grpcserver
+    equities_server/
+        go run equities_server.go
+
+6. run test for grpcserver
+    equities_server/
+        go test ./... -v --cover
+
+7. Test rest API's endpoints 
+    curl --location --request POST 'localhost:8989/orderprocessed/orderprocessed/bulk/5001' --data-raw ''
+

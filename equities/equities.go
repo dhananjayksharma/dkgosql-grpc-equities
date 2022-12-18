@@ -5,7 +5,9 @@ import (
 )
 
 // ProcessOrder
-func ProcessOrder(es *OrderRequest) error {
-	fmt.Println("ProcessOrder GetOrderid, GetUserid:", es.GetOrderid(), es.GetUserid())
-	return nil
+func ProcessOrder(es *OrderRequest) (bool, error) {
+
+	fmt.Println("AT@Streaming: GetUserid, GetOrderid:", es.GetUserid(), es.GetOrderid())
+
+	return true, nil
 }

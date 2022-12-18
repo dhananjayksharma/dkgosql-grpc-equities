@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type OrderClient interface {
 	// Sends a order
 	ProcessOrder(ctx context.Context, opts ...grpc.CallOption) (Order_ProcessOrderClient, error)
+	GetOrderListByUserID(ctx context.Context, opts ...grpc.CallOption) (Order_GetOrderListByUserIDClient, error)
 }
 
 type orderClient struct {
@@ -61,12 +62,44 @@ func (x *orderProcessOrderClient) Recv() (*OrderResponse, error) {
 	return m, nil
 }
 
+func (c *orderClient) GetOrderListByUserID(ctx context.Context, opts ...grpc.CallOption) (Order_GetOrderListByUserIDClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Order_ServiceDesc.Streams[1], "/equities.Order/GetOrderListByUserID", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &orderGetOrderListByUserIDClient{stream}
+	return x, nil
+}
+
+type Order_GetOrderListByUserIDClient interface {
+	Send(*OrderListRequest) error
+	Recv() (*OrderListResponse, error)
+	grpc.ClientStream
+}
+
+type orderGetOrderListByUserIDClient struct {
+	grpc.ClientStream
+}
+
+func (x *orderGetOrderListByUserIDClient) Send(m *OrderListRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *orderGetOrderListByUserIDClient) Recv() (*OrderListResponse, error) {
+	m := new(OrderListResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // OrderServer is the server API for Order service.
 // All implementations must embed UnimplementedOrderServer
 // for forward compatibility
 type OrderServer interface {
 	// Sends a order
 	ProcessOrder(Order_ProcessOrderServer) error
+	GetOrderListByUserID(Order_GetOrderListByUserIDServer) error
 	mustEmbedUnimplementedOrderServer()
 }
 
@@ -76,6 +109,9 @@ type UnimplementedOrderServer struct {
 
 func (UnimplementedOrderServer) ProcessOrder(Order_ProcessOrderServer) error {
 	return status.Errorf(codes.Unimplemented, "method ProcessOrder not implemented")
+}
+func (UnimplementedOrderServer) GetOrderListByUserID(Order_GetOrderListByUserIDServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetOrderListByUserID not implemented")
 }
 func (UnimplementedOrderServer) mustEmbedUnimplementedOrderServer() {}
 
@@ -116,6 +152,32 @@ func (x *orderProcessOrderServer) Recv() (*OrderRequest, error) {
 	return m, nil
 }
 
+func _Order_GetOrderListByUserID_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OrderServer).GetOrderListByUserID(&orderGetOrderListByUserIDServer{stream})
+}
+
+type Order_GetOrderListByUserIDServer interface {
+	Send(*OrderListResponse) error
+	Recv() (*OrderListRequest, error)
+	grpc.ServerStream
+}
+
+type orderGetOrderListByUserIDServer struct {
+	grpc.ServerStream
+}
+
+func (x *orderGetOrderListByUserIDServer) Send(m *OrderListResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *orderGetOrderListByUserIDServer) Recv() (*OrderListRequest, error) {
+	m := new(OrderListRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // Order_ServiceDesc is the grpc.ServiceDesc for Order service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -127,6 +189,12 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ProcessOrder",
 			Handler:       _Order_ProcessOrder_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GetOrderListByUserID",
+			Handler:       _Order_GetOrderListByUserID_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
