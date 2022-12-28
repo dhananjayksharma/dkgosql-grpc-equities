@@ -1,6 +1,7 @@
 syntax = "proto3";
 package equities;
- 
+
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/dhananjayksharma/dkgosql-grpc-equities;equities";
 
@@ -26,11 +27,16 @@ message OrderListResponse{
 message OrderRequest {
     string userid = 1;
     string orderid = 2; 
+    int64 quantity = 3;
   }
 
   message OrderResponse {
     string userid = 1;
     string orderid = 2;
     bool status = 3;
-    string newupdateddt = 4; 
+    int64 quantity = 4;
+    int64 processed_quantity = 5;
+    int64 not_processed_quantity = 6;
+    string newupdateddt = 7; 
+    google.protobuf.Timestamp orderprocessedupdatedt = 8;
   }

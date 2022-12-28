@@ -72,8 +72,9 @@ func (service orderProcessedService) BulkOrderProcessedByUserId(c *gin.Context) 
 
 	for _, row := range orderProcessData {
 		if err := stream.Send(&gGPCEquities.OrderRequest{
-			Orderid: fmt.Sprintf("%d", row.OrderId),
-			Userid:  userid,
+			Orderid:  fmt.Sprintf("%d", row.OrderId),
+			Userid:   userid,
+			Quantity: row.Quantity,
 		}); err != nil {
 			log.Fatalln("Send", err)
 		}
@@ -94,6 +95,7 @@ func (service orderProcessedService) BulkOrderProcessedByUserId(c *gin.Context) 
 		}
 
 		fmt.Printf("Processed GetUserid:%s, GetOrderid:%s, Status:%t\n", readRow.GetUserid(), readRow.GetOrderid(), readRow.GetStatus())
+		//, readRow.Orderprocessedupdatedt.AsTime()
 		fmt.Printf("readRow :%v\n\n", readRow)
 
 	}

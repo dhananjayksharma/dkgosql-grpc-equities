@@ -1,6 +1,6 @@
 .PHONY: all
 
-BINARY_NAME := dkgosql-grpc-equities-service-v4
+BINARY_NAME := dkgosql-merchant-service-v4
 
 include .envrc
 
@@ -13,7 +13,7 @@ clean:
 	go clean
 	@-rm ${BINARY_NAME}-linux
 	@-rm -f cover.html cover.out
-	@-rm -f dkgosql-grpc-equities-service
+	@-rm -f ${BINARY_NAME}
 	@echo "[OK] Cover file and old build removed!"
 
 .PHONY: exportvar

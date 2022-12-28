@@ -42,17 +42,24 @@ func (es *equitiesServer) ProcessOrder(stream gRPGEquities.Order_ProcessOrderSer
 
 		// log.Printf("Received a order to process: %v", order)
 		request := &gRPGEquities.OrderRequest{
-			Userid:  order.Userid,
-			Orderid: order.Orderid,
+			Userid:   order.Userid,
+			Orderid:  order.Orderid,
+			Quantity: order.Quantity,
 		}
 
-		status, err := gRPGEquities.ProcessOrder(request)
+		pQty, status, err := gRPGEquities.ProcessOrder(request)
+
 		response := &gRPGEquities.OrderResponse{
-			Orderid:      request.Orderid,
-			Userid:       request.Userid,
-			Status:       status,
-			Newupdateddt: time.Now().String(),
+			Orderid:              request.Orderid,
+			Userid:               request.Userid,
+			Quantity:             request.Quantity,
+			ProcessedQuantity:    pQty,
+			NotProcessedQuantity: request.Quantity - pQty,
+			Status:               status,
+			Newupdateddt:         time.Now().String(),
+			// Orderprocessedupdatedt: timestamppb.Now(),
 		}
+
 		fmt.Println("Sending Response:", response)
 
 		// Sending stream Reponse
