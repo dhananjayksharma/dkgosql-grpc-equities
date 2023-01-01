@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package equities;
+
+option go_package = "github.com/dhananjayksharma/dkgosql-grpc-equities;equities";
+
+enum OrderType {
+    ORDER_UNSPECIFIED = 0;
+    ORDER_SELL = 1;
+    ORDER_BUY = 2;
+  }
+
+enum OrderStatus {
+    ORDER_PENDING = 0;
+    ORDER_PROCESSED = 1;
+    ORDER_CANCELED = 2;
+    ORDER_EXPIRED = 3;
+  }

@@ -10,6 +10,7 @@ all: exportvar deps clean build run
 .PHONY: clean
 
 clean:
+	go clean -modcache
 	go clean
 	@-rm ${BINARY_NAME}-linux
 	@-rm -f cover.html cover.out
@@ -25,6 +26,7 @@ exportvar:
 .PHONY: deps
 
 deps:
+	@-rm -f go.sum
 	go mod tidy
 
 .PHONY: run

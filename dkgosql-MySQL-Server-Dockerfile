@@ -1,0 +1,41 @@
+
+sudo docker pull mysql/mysql-server:latest
+
+sudo docker run --name=containerdkgosqlmysqlsrv -d mysql/mysql-server:latest
+
+sudo docker logs containerdkgosqlmysqlsrv
+
+docker run --name=containerdkgosqlmysqlsrv -e MYSQL_ROOT_PASSWORD=root#123PD --restart on-failure -d mysql/mysql-server:latest
+
+docker run --name=containerdkgosqlmysqlsrv -p 3309:3309 -e MYSQL_ROOT_PASSWORD=root#123PD -d mysql/mysql-server:latest
+
+docker ps
+
+
+Docker STOP all
+docker ps -q | xargs docker stop
+
+docker ps --filter status=exited -q | xargs docker rm
+
+
+docker exec -it containerdkgosqlmysqlsrv mysql -uroot -p
+
+docker logs containerdkgosqlmysqlsrv 2>&1 | grep GENERATED
+
+
+docker stop containerdkgosqlmysqlsrv
+docker rm containerdkgosqlmysqlsrv
+
+docker exec -it containerdkgosqlmysqlsrv mysql -uroot -p
+
+&Ta5?D7^@U9&B9A8v#AuM0d3=Ejw@Y5K
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root#123PD';
+
+
+docker inspect containerdkgosqlmysqlsrv
+
+docker network create my-custom-net
+
+docker run --name=containerdkgosqlmysqlsrv --network=my-custom-net -d mysql/mysql-server -p
+

@@ -51,7 +51,7 @@ func (ms *mySQLDBStore) CreateOrderProcessed(ctx context.Context, OrderProcessed
 }
 
 func (ms *mySQLDBStore) ListOrderProcessedByID(ctx context.Context, orderProcessedData *[]response.OrdersProcessedResponse, userID string) error {
-	result := ms.db.Debug().WithContext(ctx).Model(&response.OrdersProcessedResponse{}).Select("id, user_id, order_id, quantity, status, created_dt, updated_dt").Where("user_id=?", userID).Scan(&orderProcessedData)
+	result := ms.db.Debug().WithContext(ctx).Model(&response.OrdersProcessedResponse{}).Select("id, user_id, order_id, company_id, quantity, status, order_type, created_dt, updated_dt").Where("user_id=?", userID).Scan(&orderProcessedData)
 	if result.RowsAffected == 0 {
 		return &util.DataNotFound{ErrMessage: fmt.Sprintf(consts.ErrorOrderDataNotFoundCode, userID)}
 	}

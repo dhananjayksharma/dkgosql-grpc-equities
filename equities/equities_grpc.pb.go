@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.6.1
-// source: equities/equities.proto
+// source: equities.proto
 
 package equities
 
@@ -46,7 +46,7 @@ func (c *orderClient) ProcessOrder(ctx context.Context, opts ...grpc.CallOption)
 
 type Order_ProcessOrderClient interface {
 	Send(*OrderRequest) error
-	Recv() (*OrderResponse, error)
+	Recv() (*StreamingOrderResponse, error)
 	grpc.ClientStream
 }
 
@@ -58,8 +58,8 @@ func (x *orderProcessOrderClient) Send(m *OrderRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *orderProcessOrderClient) Recv() (*OrderResponse, error) {
-	m := new(OrderResponse)
+func (x *orderProcessOrderClient) Recv() (*StreamingOrderResponse, error) {
+	m := new(StreamingOrderResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -135,7 +135,7 @@ func _Order_ProcessOrder_Handler(srv interface{}, stream grpc.ServerStream) erro
 }
 
 type Order_ProcessOrderServer interface {
-	Send(*OrderResponse) error
+	Send(*StreamingOrderResponse) error
 	Recv() (*OrderRequest, error)
 	grpc.ServerStream
 }
@@ -144,7 +144,7 @@ type orderProcessOrderServer struct {
 	grpc.ServerStream
 }
 
-func (x *orderProcessOrderServer) Send(m *OrderResponse) error {
+func (x *orderProcessOrderServer) Send(m *StreamingOrderResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -203,5 +203,5 @@ var Order_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "equities/equities.proto",
+	Metadata: "equities.proto",
 }

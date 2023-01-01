@@ -9,8 +9,13 @@ clean:
 .PHONY: genproto
 
 genproto:
-	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative equities/equities.proto  
+	protoc -I equities/ --go_out=equities/. --go_opt=paths=source_relative --go-grpc_out=equities/. --go-grpc_opt=paths=source_relative equities/*.proto
 
+	@#protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative equities/equities.proto  
+
+	@#protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative *.proto  
+	@# equities/orders.proto
+	
 .PHONY: gserver
 
 gserver:

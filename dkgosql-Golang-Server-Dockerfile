@@ -1,0 +1,28 @@
+STEP 1:
+    docker build --tag dhananjayksharma/dkgosql-grpc-equities grpcequitiesapi/. -f ./Dockerfile
+    
+
+STEP 2:
+
+docker run --name dkgosql-grpc-equities -it dhananjayksharma/dkgosql-grpc-equities /bin/bash 
+
+docker run --name dkgosql-grpc-equities -it -p 8989:8989 dhananjayksharma/dkgosql-grpc-equities
+
+docker run --name dkgosql-grpc-equities -it -p 8989:8989 -e GIN_MODE=release dhananjayksharma/dkgosql-grpc-equities:latest
+
+
+docker container commit dkgosql-grpc-equities dkgosql-grpc-equities_app:latest
+
+
+docker tag 1fe5eaf668f7 dhananjayksharma/dkgosql-grpc-equities:latest
+
+docker push dhananjayksharma/dkgosql-grpc-equities:latest
+
+docker login -u dhananjayksharma
+
+dckr_pat_EkoWSUbyvuyymSTi64leKJGScsE
+
+
+docker run -it -p 8989:8989 dhananjayksharma/dkgosql-grpc-equities:latest
+
+docker ps --filter status=exited -q | xargs docker rm

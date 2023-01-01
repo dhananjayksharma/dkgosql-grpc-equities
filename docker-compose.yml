@@ -1,0 +1,25 @@
+version: '3.6'
+services:
+  dkgosql-bse-equity-db:
+    image: mysql:8.0.28
+    environment:
+      MYSQL_DATABASE: 'BSE_Equity_Db'
+      MYSQL_ROOT_PASSWORD: 'root#123PD'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - backendbseequitiesapinetwork
+  
+  dkgosql-bseequitiesapi:
+    build: 
+      context: ./grpcequitiesapi/
+      dockerfile: Dockerfile
+    ports:
+    - "8989:8989"
+    networks: 
+      - backendbseequitiesapinetwork
+
+networks:
+  backendbseequitiesapinetwork:

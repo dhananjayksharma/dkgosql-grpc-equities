@@ -1,0 +1,5 @@
+
+
+curl --location --request POST 'localhost:8989/orderprocessed/orderprocessed/bulk/5002' \
+--data-raw ''
+

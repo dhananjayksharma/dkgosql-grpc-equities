@@ -40,8 +40,8 @@ const (
 	ErrMerchantAlreadyExists string = "Merchant already exists for merchant code: %v"
 	// ErrUserAlreadyExists string = "User already exists for input"
 
-	InvalidUserId                 = "Invalid user id input request "
-	InvalidOrderId                = "Invalid order id input request "
+	InvalidUserId                 = "invalid user id input request "
+	InvalidOrderId                = "invalid order id input request "
 	ErrorOrderDataNotFoundCode    = "Order Processed data not found for given userid %v"
 	OrderProcessedUpdatedSuccess  = "Order Processed updated successfully for code: %v"
 	ErrorOrderProcessedUpdateType = "Order Processed update failed for user_id %v, order_id %v"
