@@ -19,10 +19,11 @@ import (
 	"dkgosql-merchant-service-v4/pkg/v1/models/response"
 
 	gGPCEquities "github.com/dhananjayksharma/dkgosql-grpc-equities/equities"
-
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
+
+var MAX_ALLOWED_QTY int64 = 1600
 
 type OrderProcessedService interface {
 	GetOrderProcessedList(c *gin.Context) (models.Response, error)
@@ -51,7 +52,15 @@ func (service orderProcessedService) BulkOrderProcessedByUserId(c *gin.Context) 
 
 	// Define the context
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	// var deadlineMs = flag.Int("deadline_ms", 20*1000, "Default deadline in milliseconds.")
+
+	// clientDeadline := time.Now().Add(time.Duration(*deadlineMs) * time.Millisecond)
+	// ctx, cancel = context.WithDeadline(ctx, clientDeadline)
 	defer cancel()
+	if ctx.Err() == context.Canceled {
+		return resp, errors.New("client cancelled, abandoning.")
+	}
+
 	stream, err := clientgRCP.ProcessOrder(ctx)
 
 	if err != nil {
@@ -72,13 +81,14 @@ func (service orderProcessedService) BulkOrderProcessedByUserId(c *gin.Context) 
 
 	for _, row := range orderProcessData {
 		if err := stream.Send(&gGPCEquities.OrderRequest{
-			Orderid:  fmt.Sprintf("%d", row.OrderId),
-			Userid:   userid,
-			Quantity: row.Quantity,
+			Orderid:    fmt.Sprintf("%d", row.OrderID),
+			Userid:     userid,
+			Allowedqty: MAX_ALLOWED_QTY,
+			Quantity:   row.Quantity,
 		}); err != nil {
 			log.Fatalln("Send", err)
 		}
-		log.Printf("Sending userid, orderid:%v, %v", userid, row.OrderId)
+		log.Printf("Sending userid, orderid:%v, %v", userid, row.OrderID)
 	}
 
 	if err := stream.CloseSend(); err != nil {
@@ -87,16 +97,21 @@ func (service orderProcessedService) BulkOrderProcessedByUserId(c *gin.Context) 
 
 	for {
 		readRow, err := stream.Recv()
+		if grpcError := readRow.GetError(); grpcError != nil {
+			log.Printf("error found for processing order err:%v, errCode:%v, err Details: %v", err, grpcError.Code, grpcError.GetDetails())
+			continue
+		}
+
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			log.Fatalln("Recv", err)
 		}
-
-		fmt.Printf("Processed GetUserid:%s, GetOrderid:%s, Status:%t\n", readRow.GetUserid(), readRow.GetOrderid(), readRow.GetStatus())
-		//, readRow.Orderprocessedupdatedt.AsTime()
-		fmt.Printf("readRow :%v\n\n", readRow)
+		if resp := readRow.GetOrderresponse(); resp != nil {
+			fmt.Printf("Processed GetUserid:%s, GetOrderid:%s, Org Qty:%d, Processed Qty:%d, NOT Processed Qty:%d, Status:%t, OrderProcessed Dt:%s\n", resp.GetUserid(), resp.GetOrderid(), resp.GetQuantity(), resp.GetProcessedQuantity(), resp.GetNotProcessedQuantity(), resp.GetStatus(), resp.Orderprocessedupdatedt.String())
+			fmt.Printf("readRow :%v\n\n", resp)
+		}
 
 	}
 
@@ -160,18 +175,18 @@ func (service orderProcessedService) ListOrderProcessedByID(c *gin.Context) (mod
 	if err != nil {
 		return resp, err
 	}
-	var responseUser []response.OrdersProcessedResponse
+	var responseOrder []response.OrdersProcessedResponse
 	for _, row := range orderProcessData {
-		responseUser = append(responseUser, response.OrdersProcessedResponse{
+		responseOrder = append(responseOrder, response.OrdersProcessedResponse{
 			Status:    row.Status,
-			OrderId:   row.OrderId,
+			OrderID:   row.OrderID,
 			Quantity:  row.Quantity,
 			UserId:    row.UserId,
 			CreatedDt: row.CreatedDt,
 		})
 	}
 
-	resp.Data = responseUser
+	resp.Data = responseOrder
 	return resp, nil
 }
 
