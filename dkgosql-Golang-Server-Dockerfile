@@ -18,9 +18,6 @@ docker tag 1fe5eaf668f7 dhananjayksharma/dkgosql-grpc-equities:latest
 
 docker push dhananjayksharma/dkgosql-grpc-equities:latest
 
-docker login -u dhananjayksharma
-
-dckr_pat_EkoWSUbyvuyymSTi64leKJGScsE
 
 
 docker run -it -p 8989:8989 dhananjayksharma/dkgosql-grpc-equities:latest
