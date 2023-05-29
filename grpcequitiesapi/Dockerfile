@@ -1,15 +1,18 @@
-FROM golang:1.18
+# Build stage
+FROM golang:1.19.9-alpine3.18 AS builder
 
 WORKDIR /app
-
 COPY . .
-
 RUN go mod tidy
 RUN ls -ltr
 RUN go mod download
 
-ENV MICROSERVICECDEMONEWAPI "local"
+ENV MICROSERVICECDEMONEWAPI "local" 
+RUN GOOS=linux GOARCH=amd64 go build -o grpcequitiesapi
 
-RUN go build -o bseequitiesapi-service
-
-CMD ["./bseequitiesapi-service"]
+# Run stage
+FROM builder
+WORKDIR /app
+COPY --from=builder /app/grpcequitiesapi/ /app/
+EXPOSE 8989
+CMD ["./grpcequitiesapi"]

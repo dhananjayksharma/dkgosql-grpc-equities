@@ -2,12 +2,12 @@ package query
 
 import (
 	"context"
-	"dkgosql-merchant-service-v4/internals/adapter/mysql/entities"
-	"dkgosql-merchant-service-v4/internals/consts"
-	"dkgosql-merchant-service-v4/internals/util"
-	"dkgosql-merchant-service-v4/pkg/v1/models/request"
-	"dkgosql-merchant-service-v4/pkg/v1/models/response"
 	"fmt"
+	"grpcequitiesapi/internals/adapter/mysql/entities"
+	"grpcequitiesapi/internals/consts"
+	"grpcequitiesapi/internals/util"
+	"grpcequitiesapi/pkg/v1/models/request"
+	"grpcequitiesapi/pkg/v1/models/response"
 	"log"
 	"strings"
 

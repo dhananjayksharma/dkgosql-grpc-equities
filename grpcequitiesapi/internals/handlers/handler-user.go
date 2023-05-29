@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"dkgosql-merchant-service-v4/internals/util"
-	"dkgosql-merchant-service-v4/pkg/v1/models/users"
+	"grpcequitiesapi/internals/util"
+	"grpcequitiesapi/pkg/v1/models/users"
 
 	"github.com/gin-gonic/gin"
 )

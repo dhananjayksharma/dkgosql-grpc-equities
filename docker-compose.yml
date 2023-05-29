@@ -1,25 +1,35 @@
-version: '3.6'
-services:
-  dkgosql-bse-equity-db:
-    image: mysql:8.0.28
+version: "3.6"
+services: 
+  dkgosql_bseequity_db:
+    container_name: dkgosql_bseequity_db
+    image: mariadb:10-focal
+    restart: always 
+    networks:  
+      - backnet
     environment:
-      MYSQL_DATABASE: 'BSE_Equity_Db'
-      MYSQL_ROOT_PASSWORD: 'root#123PD'
+      MYSQL_DATABASE: BSE_Equity_Db
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root#123PD
     ports:
-      - '3306:3306'
+      - '3336:3336'
+    volumes:
+      - db-data:/var/lib/dkgosql-bseequity-db/data
     expose:
-      - '3306'
-    networks:
-      - backendbseequitiesapinetwork
-  
-  dkgosql-bseequitiesapi:
-    build: 
-      context: ./grpcequitiesapi/
+      - '3336'
+
+  equities-rest-api:
+    container_name: equities-rest-api
+    build:  
+      context: ./grpcequitiesapi
       dockerfile: Dockerfile
     ports:
-    - "8989:8989"
-    networks: 
-      - backendbseequitiesapinetwork
+      - "8989:8989"
+    depends_on:
+      - dkgosql_bseequity_db
+    networks:  
+      - backnet 
+volumes:  
+  db-data: {}
 
 networks:
-  backendbseequitiesapinetwork:
+  backnet: {}

@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"dkgosql-merchant-service-v4/internals/util"
 	"errors"
 	"fmt"
+	"grpcequitiesapi/internals/util"
 
 	auth "github.com/dhananjayksharma/dkgo-auth/auth"
 	"github.com/gin-gonic/gin"

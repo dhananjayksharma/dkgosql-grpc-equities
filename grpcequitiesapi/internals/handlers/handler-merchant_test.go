@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"bytes"
-	"dkgosql-merchant-service-v4/internals/adapter/mysql/query"
-	"dkgosql-merchant-service-v4/pkg/v1/models/merchants"
-	"dkgosql-merchant-service-v4/pkg/v1/models/response"
-	"dkgosql-merchant-service-v4/pkg/v1/models/users"
 	"encoding/json"
+	"grpcequitiesapi/internals/adapter/mysql/query"
+	"grpcequitiesapi/pkg/v1/models/merchants"
+	"grpcequitiesapi/pkg/v1/models/response"
+	"grpcequitiesapi/pkg/v1/models/users"
 	"net/http"
 	"net/http/httptest"
 

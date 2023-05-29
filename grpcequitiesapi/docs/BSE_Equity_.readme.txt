@@ -1,6 +1,6 @@
 https://dev.to/aurelievache/learning-go-by-examples-part-2-create-an-http-rest-api-server-in-go-1cdm
 
-go mod init dkgosql-merchant-service-v4
+go mod init grpcequitiesapi
 
 go build -o bin/go-rest-api internal/main.go
 
