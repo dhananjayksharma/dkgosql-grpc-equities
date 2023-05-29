@@ -7,5 +7,5 @@ database:
     dbname: "BSE_Equity_Db"
     dbuser: "root"
     dbpassword: "root#123PD"
-    hostname: "127.0.0.1:3360"
+    hostname: "dkgosql_bseequity_db:3336"
 

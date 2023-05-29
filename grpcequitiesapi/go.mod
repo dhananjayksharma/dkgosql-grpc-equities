@@ -1,12 +1,12 @@
-module dkgosql-merchant-service-v4
+module grpcequitiesapi
 
 go 1.18
 
-replace github.com/dhananjayksharma/dkgosql-grpc-equities v0.0.0 => ./../
+// replace github.com/dhananjayksharma/dkgosql-grpc-equities v0.0.0 => ./..
 
 require (
 	github.com/dhananjayksharma/dkgo-auth/auth v0.0.0-20220826164738-23b3a463e57c
-	github.com/dhananjayksharma/dkgosql-grpc-equities v0.0.0
+	// github.com/dhananjayksharma/dkgosql-grpc-equities v0.0.0
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.2
 	github.com/jinzhu/gorm v1.9.16

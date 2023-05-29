@@ -12,12 +12,12 @@ import (
 	"syscall"
 	"time"
 
-	"dkgosql-merchant-service-v4/internals/adapter/mysql"
-	"dkgosql-merchant-service-v4/internals/adapter/mysql/query"
-	"dkgosql-merchant-service-v4/internals/handlers"
-	"dkgosql-merchant-service-v4/pkg/v1/models/merchants"
-	"dkgosql-merchant-service-v4/pkg/v1/models/orderprocessed"
-	"dkgosql-merchant-service-v4/pkg/v1/models/users"
+	"grpcequitiesapi/internals/adapter/mysql"
+	"grpcequitiesapi/internals/adapter/mysql/query"
+	"grpcequitiesapi/internals/handlers"
+	"grpcequitiesapi/pkg/v1/models/merchants"
+	"grpcequitiesapi/pkg/v1/models/orderprocessed"
+	"grpcequitiesapi/pkg/v1/models/users"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

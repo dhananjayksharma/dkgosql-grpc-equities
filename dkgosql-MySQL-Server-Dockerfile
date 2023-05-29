@@ -39,3 +39,9 @@ docker network create my-custom-net
 
 docker run --name=containerdkgosqlmysqlsrv --network=my-custom-net -d mysql/mysql-server -p
 
+
+
+----------
+
+docker exec -it dkgosql_bseequity_db  mysql -u root -proot#123PD
+

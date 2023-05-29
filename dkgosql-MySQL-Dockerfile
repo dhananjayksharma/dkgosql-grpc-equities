@@ -38,3 +38,11 @@ docker network create my-custom-net
 
 docker run --name=containerdkgosqlmysql --network=my-custom-net -d mysql -p
 
+----------
+
+docker exec -it dkgosql_bseequity_db  mysql -u root -proot#123PD
+
+
+use BSE_Equity_Db;
+show tables;
+select * from merchants;

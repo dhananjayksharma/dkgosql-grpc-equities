@@ -1,6 +1,6 @@
 .PHONY: all
 
-BINARY_NAME := dkgosql-merchant-service-v4
+BINARY_NAME := grpcequitiesapi
 
 include .envrc
 

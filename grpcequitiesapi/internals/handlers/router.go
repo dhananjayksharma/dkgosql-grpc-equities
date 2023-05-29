@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"dkgosql-merchant-service-v4/internals/middleware"
-	"dkgosql-merchant-service-v4/pkg/v1/models/merchants"
-	"dkgosql-merchant-service-v4/pkg/v1/models/orderprocessed"
-	"dkgosql-merchant-service-v4/pkg/v1/models/users"
+	"grpcequitiesapi/internals/middleware"
+	"grpcequitiesapi/pkg/v1/models/merchants"
+	"grpcequitiesapi/pkg/v1/models/orderprocessed"
+	"grpcequitiesapi/pkg/v1/models/users"
 	"time"
 
 	"github.com/gin-contrib/cors"
