@@ -11,6 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	CONST_MERCHANTS      = "/merchants"
+	CONST_ORDERPROCESSED = "/orderprocessed"
+)
+
 func SetupRouter(merchantService merchants.MerchantService, userService users.UserService, orderService orderprocessed.OrderProcessedService) *gin.Engine {
 	r := gin.Default()
 	corsConfig := CORS()
@@ -26,30 +31,30 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 
 	orderProcessedHandler := NewOrderProcessedHandler(orderService)
 	{
-		v1Group := r.Group("/merchants")
+		v1Group := r.Group(CONST_MERCHANTS)
 		{
 
 			secured := v1Group.Group("/secured").Use(middleware.Auth())
 			{
 				secured.PUT("/merchant/:code", merchantHandler.UpdateMerchantByID)
-				secured.POST("/merchants", merchantHandler.CreateMerchant)
-				secured.GET("/merchants", merchantHandler.GetMerchantList) //.Use(auth.GetClaim(c))
+				secured.POST(CONST_MERCHANTS, merchantHandler.CreateMerchant)
+				secured.GET(CONST_MERCHANTS, merchantHandler.GetMerchantList) //.Use(auth.GetClaim(c))
 				secured.GET("/members/:code", userHandler.ListMembersByCode)
 				secured.POST("/:code/member", userHandler.CreateMerchantMember)
 			}
-			v1Group.GET("/merchants", merchantHandler.GetMerchantList)
-			v1Group.POST("/merchants", merchantHandler.CreateMerchant)
+			v1Group.GET(CONST_MERCHANTS, merchantHandler.GetMerchantList)
+			v1Group.POST(CONST_MERCHANTS, merchantHandler.CreateMerchant)
 			v1Group.POST("/member/login", userHandler.LoginMember)
 			v1Group.GET("/member/refresh", userHandler.RefreshToken)
 
 		}
 		// orderprocessed
-		v2Group := r.Group("/orderprocessed")
-		v2Group.GET("/orderprocessed", orderProcessedHandler.GetOrderProcessedList)
+		v2Group := r.Group(CONST_ORDERPROCESSED)
+		v2Group.GET(CONST_ORDERPROCESSED, orderProcessedHandler.GetOrderProcessedList)
 		v2Group.GET("/listbyid/:userid", orderProcessedHandler.ListOrderProcessedByID)
-		v2Group.POST("/orderprocessed", orderProcessedHandler.CreateOrderProcessed)
-		v2Group.PUT("/orderprocessed", orderProcessedHandler.UpdateOrderProcessedByID)
-		v2Group.POST("/orderprocessed/bulk/:userid", orderProcessedHandler.BulkOrderProcessedByUserId)
+		v2Group.POST(CONST_ORDERPROCESSED, orderProcessedHandler.CreateOrderProcessed)
+		v2Group.PUT(CONST_ORDERPROCESSED, orderProcessedHandler.UpdateOrderProcessedByID)
+		v2Group.POST(CONST_ORDERPROCESSED+"/bulk/:userid", orderProcessedHandler.BulkOrderProcessedByUserId)
 	}
 	return r
 }
