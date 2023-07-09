@@ -1,0 +1,21 @@
+These are the steps:
+0. Requirement gathering
+0.1. Tech Stacks
+0.2. Team Selection
+0.3. Timeline and Delivery
+0.2. Data Modeling, API designing
+
+1.  init project
+2.  start docker with docker-compose
+3.  script to load sql - shell script
+4.  Development
+4.  api unit testing
+5.  swagger documentation
+6.  gRCP 
+6a. Redis 
+7.  Kafka - 
+8.  ELK -  
+9.  
+10.  
+11.  
+12.  

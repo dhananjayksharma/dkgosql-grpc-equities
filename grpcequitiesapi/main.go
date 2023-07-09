@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"grpcequitiesapi/internals/adapter/mysql"
-	"grpcequitiesapi/internals/adapter/mysql/query"
+	"grpcequitiesapi/internals/adapter/pgsql"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
 	"grpcequitiesapi/internals/handlers"
 	"grpcequitiesapi/pkg/v1/models/merchants"
 	"grpcequitiesapi/pkg/v1/models/orderprocessed"
@@ -51,8 +51,8 @@ func startService() {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
-	dbReadWrite := viper.GetString("ENV_VAR_RW")
-	dbConnection, err := mysql.DBConn(dbReadWrite)
+	dbstr := viper.GetString("PG_URL")
+	dbConnection, err := mysql.DBConn(dbstr)
 	if err != nil {
 		log.Fatalf("MySQL connection error , %v", err)
 	} else {

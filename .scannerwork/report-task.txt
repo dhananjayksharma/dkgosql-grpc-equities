@@ -1,0 +1,6 @@
+projectKey=dkgosqlGRPCEquity
+serverUrl=http://localhost:9999
+serverVersion=8.5.1.38104
+dashboardUrl=http://localhost:9999/dashboard?id=dkgosqlGRPCEquity
+ceTaskId=AYbKVg9AkMvyS5c8X4dA
+ceTaskUrl=http://localhost:9999/api/ce/task?id=AYbKVg9AkMvyS5c8X4dA

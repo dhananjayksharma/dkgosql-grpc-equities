@@ -3,7 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"grpcequitiesapi/internals/adapter/mysql/query"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
 	"grpcequitiesapi/pkg/v1/models/merchants"
 	"grpcequitiesapi/pkg/v1/models/response"
 	"grpcequitiesapi/pkg/v1/models/users"

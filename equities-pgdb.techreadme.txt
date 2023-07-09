@@ -1,0 +1,58 @@
+docker stop equities-database && docker rm equities-database
+
+docker run -d --name equities-database -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=4y7sV96vA9wv46VR -e PGDATA=/var/lib/postgresql/data/pgdata -v /tmp:/var/lib/postgresql/data -p 5434:5434 -it postgres:14.1-alpine
+
+docker exec -it equities-database /bin/sh
+
+docker exec -it equities-database /bin/bash
+
+psql -h localhost -p 5432 -U postgres -w
+
+psql -h localhost -U postgres -w
+
+docker exec -it equities-database psql -U postgres
+
+\l
+\CREATE DATABASE —create BSE_Equity_Db
+\c BSE_Equity_Db
+
+CREATE DATABASE BSE_Equity_Db;
+
+---- network type ----
+not connecting
+ 
+psql -Upostgres
+
+docker build --tag equities-api .
+
+ALTER ROLE postgres WITH PASSWORD 'pass@123PGdb';
+
+psql -Upostgres -hlocalhost -p5434
+
+
+# COPY . .
+# RUN go mod tidy 
+# RUN go build . -o equities-api
+# RUN CGO_ENABLED=0 GOOS=linux go build -o 
+
+
+
+NETWORK :
+--------- 
+docker network create equities-network
+
+docker network connect equities-network equities-database
+
+
+docker equities-database inspect 
+docker network create equities-network-database-host
+
+docker network ls
+
+docker network inspect equities-network-database-host
+docker network connect equities-network-database-host equities-database
+
+ip addr show
+
+sudo netstat -tulpn | grep :80
+
