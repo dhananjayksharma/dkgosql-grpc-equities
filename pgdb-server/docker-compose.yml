@@ -1,5 +1,5 @@
-version: "3.6"
-services: 
+version: '3.6'
+services:
   equities-database:
     container_name: equities-database
     image: postgres:14.1-alpine
@@ -14,7 +14,8 @@ services:
       - dbequities:/var/lib/postgresql/data 
     networks:
       - equities-network
-
+    extra_hosts:
+      - "equities.docker.internal:127.0.0.1"
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4:5.5
@@ -30,17 +31,6 @@ services:
     networks:
       - equities-network
 
-  equities-rest-api:
-    container_name: equities-rest-api
-    build:  
-      context: ./grpcequitiesapi
-      dockerfile: Dockerfile
-    ports:
-      - "8989:8989"
-    depends_on:
-      - equities-database
-    networks:  
-      - equities-network 
 networks:
   equities-network:
 

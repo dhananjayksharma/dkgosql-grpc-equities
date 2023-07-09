@@ -3,7 +3,7 @@ package query
 import (
 	"context"
 	"fmt"
-	"grpcequitiesapi/internals/adapter/mysql/entities"
+	"grpcequitiesapi/internals/adapter/pgsql/entities"
 	"grpcequitiesapi/internals/consts"
 	"grpcequitiesapi/internals/util"
 	"grpcequitiesapi/pkg/v1/models/request"

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"grpcequitiesapi/internals/adapter/mysql/entities"
-	"grpcequitiesapi/internals/adapter/mysql/query"
+	"grpcequitiesapi/internals/adapter/pgsql/entities"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
 	"grpcequitiesapi/internals/consts"
 	"grpcequitiesapi/internals/util"
 	"grpcequitiesapi/pkg/v1/models"

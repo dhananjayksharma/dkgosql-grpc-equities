@@ -2,7 +2,7 @@ package query
 
 import (
 	"context"
-	"grpcequitiesapi/internals/adapter/mysql/entities"
+	"grpcequitiesapi/internals/adapter/pgsql/entities"
 	"grpcequitiesapi/pkg/v1/models/request"
 	"grpcequitiesapi/pkg/v1/models/response"
 )

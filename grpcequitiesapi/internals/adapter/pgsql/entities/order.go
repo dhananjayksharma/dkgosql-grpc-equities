@@ -4,9 +4,9 @@ import (
 	"time"
 )
 
-var _table_ordersprocessed = "ordersprocessed"
+var _table_orders = "orders"
 
-type OrdersProcessed struct {
+type Orders struct {
 	ID        int       `gorm:"column:id;primary_key"`
 	Status    uint8     `gorm:"column:status"`
 	UserId    int       `gorm:"column:user_id"`
@@ -18,7 +18,7 @@ type OrdersProcessed struct {
 	UpdatedDt time.Time `gorm:"column:updated_dt"`
 }
 
-// TableName get sql table name ordersprocessed
-func (m *OrdersProcessed) TableName() string {
-	return _table_ordersprocessed
+// TableName get sql table name order
+func (m *Orders) TableName() string {
+	return _table_orders
 }
