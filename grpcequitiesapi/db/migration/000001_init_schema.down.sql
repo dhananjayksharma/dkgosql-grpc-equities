@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS merchants;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS ordersprocessed;
+DROP TABLE IF EXISTS users;
