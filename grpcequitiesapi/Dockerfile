@@ -14,5 +14,7 @@ RUN GOOS=linux GOARCH=amd64 go build -o grpcequitiesapi
 FROM builder
 WORKDIR /app
 COPY --from=builder /app/grpcequitiesapi/ /app/
+COPY db/migration ./db/migration
+
 EXPOSE 8989
 CMD ["./grpcequitiesapi"]

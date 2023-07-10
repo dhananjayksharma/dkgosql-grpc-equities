@@ -8,7 +8,7 @@ all: exportvar deps clean build run
 	#run no use as 30Mar2022 runasdocker		test
 
 .PHONY: clean
-
+ 
 clean:
 	go clean -modcache
 	go clean
@@ -16,6 +16,11 @@ clean:
 	@-rm -f cover.html cover.out
 	@-rm -f ${BINARY_NAME}
 	@echo "[OK] Cover file and old build removed!"
+
+# .PHONY: migrateup
+
+# migrateup:
+#     migrate -path db/migration/init_schema.up.sql -database "postgresql://postgres:pass@123PGdb@equities.docker.internal:5441/BSE_Equity_Db?sslmode=disable" -verbose up
 
 .PHONY: exportvar
 
