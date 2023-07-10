@@ -3,4 +3,4 @@ CONS_WEB_PORT: "0.0.0.0:8989"
 ENV_RUN_ENV : "Started service running as " 
 
 PG_URL : "postgres://postgres:pass@123PGdb@equities.docker.internal:5441/BSE_Equity_Db?sslmode=disable"
-
+DBMIGRATION_URL : "file://db/migration"

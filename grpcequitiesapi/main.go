@@ -5,19 +5,19 @@ import (
 	"embed"
 	"flag"
 	"fmt"
+	"grpcequitiesapi/internals/adapter/pgsql"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
+	// "grpcequitiesapi/internals/dbmigration"
+	"grpcequitiesapi/internals/handlers"
+	"grpcequitiesapi/pkg/v1/models/merchants"
+	"grpcequitiesapi/pkg/v1/models/orderprocessed"
+	"grpcequitiesapi/pkg/v1/models/users"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"grpcequitiesapi/internals/adapter/pgsql"
-	"grpcequitiesapi/internals/adapter/pgsql/query"
-	"grpcequitiesapi/internals/handlers"
-	"grpcequitiesapi/pkg/v1/models/merchants"
-	"grpcequitiesapi/pkg/v1/models/orderprocessed"
-	"grpcequitiesapi/pkg/v1/models/users"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -52,7 +52,13 @@ func startService() {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 	dbstr := viper.GetString("PG_URL")
-	dbConnection, err := mysql.DBConn(dbstr)
+
+	// migration
+	// dbMigrationURL := viper.GetString("DBMIGRATION_URL")
+	// dbmigration.RunDBMigration(dbMigrationURL, dbstr)
+
+	// connecting database
+	dbConnection, err := pgsql.DBConn(dbstr)
 	if err != nil {
 		log.Fatalf("MySQL connection error , %v", err)
 	} else {
@@ -67,9 +73,11 @@ func startService() {
 	router := handlers.SetupRouter(merchantService, userService, orderProcessedService)
 	serverPort := viper.GetString("CONS_WEB_PORT")
 	log.Printf("API environment :%v", viper.GetString("ENV_RUN_ENV"))
+
 	listenAndServe(router, serverPort)
 }
 
+// startgRPCClient
 func startgRPCClient() {
 	fmt.Println("Starting Client...")
 	var addr = flag.String("addr", "localhost:50051", "the address to connect to")
@@ -85,7 +93,6 @@ func main() {
 	flag.Parse()
 	go startgRPCClient()
 	startService()
-
 }
 
 func listenAndServe(router *gin.Engine, port string) {

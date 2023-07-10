@@ -82,7 +82,7 @@ func ParseDOB(dob string) (*time.Time, error) {
 	return &convertedDate, nil
 }
 
-//reference https://golangr.com/difference-between-two-dates/
+// reference https://golangr.com/difference-between-two-dates/
 func calculateYearDiff(a, b time.Time) (year int) {
 	if a.Location() != b.Location() {
 		b = b.In(a.Location())
