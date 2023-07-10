@@ -6,10 +6,11 @@ import (
 
 var _table_mc = "merchants"
 
+// Merchant
 type Merchant struct {
 	ID        int64     `gorm:"primaryKey;autoIncrement;not null"`
-	Code      string    `gorm:"column:code;index:Code_UniqueIndex" json:"code"`
-	Name      string    `gorm:"column:name" json:"name"`
+	Code      string    `gorm:"column:code;uniqueIndex:Code_Name_UniqueIndex" json:"code"`
+	Name      string    `gorm:"column:name;uniqueIndex:Code_Name_UniqueIndex" json:"name"`
 	Address   string    `gorm:"column:address" json:"address"`
 	Status    *uint8    `gorm:"column:status;default:1" json:"status"`
 	CreatedAt time.Time `gorm:"column:created_at" json:"createdAt"`
