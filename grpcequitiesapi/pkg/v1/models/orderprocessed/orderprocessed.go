@@ -156,7 +156,7 @@ func (service orderProcessedService) ListOrderProcessedByID(c *gin.Context) (mod
 
 	skip_number, err := strconv.ParseInt(c.Query("skip"), 10, 64)
 
-	if skip_number < 1 || err != nil {
+	if skip_number < 0 || err != nil {
 		log.Printf("skip_number %d, %v\n", skip_number, err)
 		err = errors.New(consts.SkipMessage)
 		return resp, err
