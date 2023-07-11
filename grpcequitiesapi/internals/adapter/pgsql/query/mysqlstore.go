@@ -37,7 +37,7 @@ type MySQLDBStoreAccess interface {
 	//
 	GetOrderProcessedList(ctx context.Context, OrderProcessedData *[]response.OrdersProcessedResponse) error
 	CreateOrderProcessed(ctx context.Context, OrderProcessedData *entities.OrdersProcessed) error
-	ListOrderProcessedByID(ctx context.Context, OrderProcessedData *[]response.OrdersProcessedResponse, userID int) error
+	ListOrderProcessedByID(ctx context.Context, OrderProcessedData *[]response.OrdersProcessedResponse, userID string) error
 	UpdateOrderProcessedByID(ctx context.Context, orderProcess *entities.OrdersProcessed, updateTypeData map[string]interface{}, orderProcessRequest request.UpdateOrderProcessedInputRequest) error
 }
 

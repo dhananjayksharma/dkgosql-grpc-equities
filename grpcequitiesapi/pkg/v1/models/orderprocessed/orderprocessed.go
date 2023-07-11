@@ -147,32 +147,33 @@ func (service orderProcessedService) ListOrderProcessedByID(c *gin.Context) (mod
 	var orderProcessData []response.OrdersProcessedResponse
 	var resp = models.Response{}
 
-	userid, err := strconv.ParseUint(c.Query("userid"), 10, 64)
-	if userid == 0 {
+	userid, _ := strconv.ParseInt(c.Param("userid"), 10, 64)
+
+	if userid < 1 {
 		err := errors.New(consts.InvalidUserId)
 		return resp, err
 	}
 
-	skip_number, err := strconv.ParseUint(c.Query("skip"), 10, 64)
-	if skip_number < 0 || err != nil {
-		if err != nil {
-			return resp, err
-		}
+	skip_number, err := strconv.ParseInt(c.Query("skip"), 10, 64)
+
+	if skip_number < 1 || err != nil {
+		log.Printf("skip_number %d, %v\n", skip_number, err)
 		err = errors.New(consts.SkipMessage)
 		return resp, err
 	}
 
-	page_limit, _ := strconv.ParseUint(c.Query("limit"), 10, 64)
+	page_limit, err := strconv.ParseInt(c.Query("limit"), 10, 64)
 
 	if page_limit < 1 {
+		log.Printf("page_limit %d, %v\n", page_limit, err)
 		err = errors.New(consts.PageLimitMessage)
 		return resp, err
 	}
 
-	var queryParams = request.QueryOrderProcessedInputRequest{UserID: userid, Limit: int(page_limit), Skip: int(skip_number)}
+	var queryParams = request.QueryOrderProcessedInputRequest{UserID: fmt.Sprintf("%d", userid), Limit: int(page_limit), Skip: int(skip_number)}
 	_ = queryParams
 
-	err = service.db.ListOrderProcessedByID(ctx, &orderProcessData, userid)
+	err = service.db.ListOrderProcessedByID(ctx, &orderProcessData, fmt.Sprintf("%d", userid))
 	if err != nil {
 		return resp, err
 	}

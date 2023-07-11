@@ -22,7 +22,7 @@ type UpdateOrderProcessedInputRequest struct {
 type QueryOrderProcessedInputRequest struct {
 	Limit  int
 	Skip   int
-	UserID int
+	UserID string
 }
 
 type LoginOrderProcessedInputRequest struct {

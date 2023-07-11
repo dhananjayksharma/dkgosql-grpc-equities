@@ -25,8 +25,8 @@ const (
 
 	MerchantAddedSuccess   = "Merchant added successfully"
 	MerchantUpdatedSuccess = "Merchant updated successfully for code: %v"
-	PageLimitMessage       = "Invalid page limit"
-	SkipMessage            = "Invalid skip limit"
+	PageLimitMessage       = "invalid page limit"
+	SkipMessage            = "invalid skip limit"
 
 	ActiveStatus            = 1 // Active
 	DeactiveStatus          = 0 // DeactiveStatus
