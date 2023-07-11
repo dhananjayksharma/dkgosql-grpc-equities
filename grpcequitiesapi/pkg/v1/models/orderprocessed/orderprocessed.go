@@ -147,11 +147,12 @@ func (service orderProcessedService) ListOrderProcessedByID(c *gin.Context) (mod
 	var orderProcessData []response.OrdersProcessedResponse
 	var resp = models.Response{}
 
-	userid := strings.Trim(c.Param("userid"), "")
-	if len(userid) == 0 {
+	userid, err := strconv.ParseUint(c.Query("userid"), 10, 64)
+	if userid == 0 {
 		err := errors.New(consts.InvalidUserId)
 		return resp, err
 	}
+
 	skip_number, err := strconv.ParseUint(c.Query("skip"), 10, 64)
 	if skip_number < 0 || err != nil {
 		if err != nil {

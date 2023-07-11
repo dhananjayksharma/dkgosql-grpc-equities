@@ -40,8 +40,8 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 				secured.POST(CONST_MERCHANTS, merchantHandler.CreateMerchant)
 				secured.GET(CONST_MERCHANTS, merchantHandler.GetMerchantList) //.Use(auth.GetClaim(c))
 				secured.GET("/members/:code", userHandler.ListMembersByCode)
-				secured.POST("/:code/member", userHandler.CreateMerchantMember)
 			}
+			v1Group.POST("/:code/member", userHandler.CreateMerchantMember)
 			v1Group.GET(CONST_MERCHANTS, merchantHandler.GetMerchantList)
 			v1Group.POST(CONST_MERCHANTS, merchantHandler.CreateMerchant)
 			v1Group.POST("/member/login", userHandler.LoginMember)
