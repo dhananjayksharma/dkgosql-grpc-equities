@@ -22,6 +22,8 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 
 	r.Use(corsConfig)
 	healthHandler := NewHealthHandler()
+
+	// swagger:route GET /health checking for the server
 	r.GET("/health", healthHandler.Health)
 
 	// NewMerchantHandler
@@ -33,7 +35,7 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 	{
 		v1Group := r.Group(CONST_MERCHANTS)
 		{
-
+			// swagger:route Group /secured route group for application
 			secured := v1Group.Group("/secured").Use(middleware.Auth())
 			{
 				secured.PUT("/merchant/:code", merchantHandler.UpdateMerchantByID)

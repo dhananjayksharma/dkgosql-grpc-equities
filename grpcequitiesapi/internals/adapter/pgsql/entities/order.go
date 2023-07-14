@@ -6,6 +6,8 @@ import (
 
 var _table_orders = "orders"
 
+// Orders represents the order for users
+// swagger:model
 type Orders struct {
 	ID        int       `gorm:"column:id;primary_key"`
 	Status    uint8     `gorm:"column:status"`

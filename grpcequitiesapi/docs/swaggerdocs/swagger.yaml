@@ -1,0 +1,128 @@
+definitions:
+  Merchant:
+    description: Merchant represents the merchant for this application
+    properties:
+      ID:
+        format: int64
+        type: integer
+      address:
+        type: string
+        x-go-name: Address
+      code:
+        type: string
+        x-go-name: Code
+      createdAt:
+        format: date-time
+        type: string
+        x-go-name: CreatedAt
+      name:
+        type: string
+        x-go-name: Name
+      status:
+        format: uint8
+        type: integer
+        x-go-name: Status
+      updatedAt:
+        format: date-time
+        type: string
+        x-go-name: UpdatedAt
+    type: object
+    x-go-package: grpcequitiesapi/internals/adapter/pgsql/entities
+  Orders:
+    description: Orders represents the order for users
+    properties:
+      CompanyID:
+        format: int64
+        type: integer
+      CreatedDt:
+        format: date-time
+        type: string
+      ID:
+        format: int64
+        type: integer
+      OrderID:
+        format: int64
+        type: integer
+      OrderType:
+        format: int32
+        type: integer
+      Quantity:
+        format: int64
+        type: integer
+      Status:
+        format: uint8
+        type: integer
+      UpdatedDt:
+        format: date-time
+        type: string
+      UserId:
+        format: int64
+        type: integer
+    type: object
+    x-go-package: grpcequitiesapi/internals/adapter/pgsql/entities
+  OrdersProcessed:
+    description: OrdersProcessed represents the processed order for users
+    properties:
+      CompanyID:
+        format: int64
+        type: integer
+      CreatedDt:
+        format: date-time
+        type: string
+      ID:
+        format: int64
+        type: integer
+      OrderID:
+        format: int64
+        type: integer
+      OrderType:
+        format: int32
+        type: integer
+      Quantity:
+        format: int64
+        type: integer
+      QuantityProcessed:
+        format: int64
+        type: integer
+      Status:
+        format: uint8
+        type: integer
+      UpdatedDt:
+        format: date-time
+        type: string
+      UserId:
+        format: int64
+        type: integer
+    type: object
+    x-go-package: grpcequitiesapi/internals/adapter/pgsql/entities
+  Users:
+    description: Users represents the user for this application
+    properties:
+      CreatedAt:
+        format: date-time
+        type: string
+      Email:
+        type: string
+      FirstName:
+        type: string
+      FkCode:
+        type: string
+      ID:
+        format: int64
+        type: integer
+      IsActive:
+        format: uint8
+        type: integer
+      LastName:
+        type: string
+      Mobile:
+        type: string
+      Password:
+        type: string
+      UpdatedAt:
+        format: date-time
+        type: string
+    type: object
+    x-go-package: grpcequitiesapi/internals/adapter/pgsql/entities
+paths: {}
+swagger: "2.0"
