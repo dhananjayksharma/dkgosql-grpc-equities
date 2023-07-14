@@ -6,7 +6,8 @@ import (
 
 var _table_mc = "merchants"
 
-// Merchant
+// Merchant represents the merchant for this application
+// swagger:model
 type Merchant struct {
 	ID        int64     `gorm:"primaryKey;autoIncrement;not null"`
 	Code      string    `gorm:"column:code;uniqueIndex:Code_Name_UniqueIndex" json:"code"`

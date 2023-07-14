@@ -1,0 +1,16 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "checking",
+          "for",
+          "the"
+        ],
+        "operationId": "server"
+      }
+    },
+    "/secured": {}
+  }
+}

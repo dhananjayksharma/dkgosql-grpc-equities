@@ -1,0 +1,7 @@
+ swagger generate spec -o ./docs/swaggerdocs/swagger.json
+
+
+ swagger generate spec --scan-models --output=./docs/swaggerdocs/swagger.yaml
+
+
+ 

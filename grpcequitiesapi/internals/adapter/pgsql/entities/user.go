@@ -1,3 +1,6 @@
+// Copyright x go-swagger maintainers
+//
+// ...
 package entities
 
 import (
@@ -6,6 +9,8 @@ import (
 
 var _table_users = "users"
 
+// Users represents the user for this application
+// swagger:model
 type Users struct {
 	ID        int       `gorm:"column:id;primary_key"`
 	FkCode    string    `gorm:"column:fk_code;index:Code_Email_UniqueIndex"`
