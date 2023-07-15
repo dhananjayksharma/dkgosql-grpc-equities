@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"grpcequitiesapi/internals/middleware"
+	"grpcequitiesapi/pkg/v1/models/companies"
 	"grpcequitiesapi/pkg/v1/models/merchants"
 	"grpcequitiesapi/pkg/v1/models/orderprocessed"
 	"grpcequitiesapi/pkg/v1/models/users"
@@ -14,9 +15,10 @@ import (
 const (
 	CONST_MERCHANTS      = "/merchants"
 	CONST_ORDERPROCESSED = "/orderprocessed"
+	CONST_COMPANY        = "/companies"
 )
 
-func SetupRouter(merchantService merchants.MerchantService, userService users.UserService, orderService orderprocessed.OrderProcessedService) *gin.Engine {
+func SetupRouter(companyService companies.CompanyService, merchantService merchants.MerchantService, userService users.UserService, orderService orderprocessed.OrderProcessedService) *gin.Engine {
 	r := gin.Default()
 	corsConfig := CORS()
 
@@ -31,6 +33,9 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 	// NewUserHandler
 	userHandler := NewUserHandler(userService)
 
+	// NewCompanyHandler
+	companyHandler := NewCompanyHandler(companyService)
+
 	orderProcessedHandler := NewOrderProcessedHandler(orderService)
 	{
 		v1Group := r.Group(CONST_MERCHANTS)
@@ -41,6 +46,9 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 				secured.PUT("/merchant/:code", merchantHandler.UpdateMerchantByID)
 				secured.POST(CONST_MERCHANTS, merchantHandler.CreateMerchant)
 				secured.GET(CONST_MERCHANTS, merchantHandler.GetMerchantList) //.Use(auth.GetClaim(c))
+				//secured.PUT("/company/:code", companyHandler.UpdateCompanyByID)
+				//secured.POST(CONST_MERCHANTS, companyHandler.CreateCompany)
+				//secured.GET(CONST_MERCHANTS, companyHandler.GetCompanyList)
 				secured.GET("/members/:code", userHandler.ListMembersByCode)
 			}
 			v1Group.POST("/:code/member", userHandler.CreateMerchantMember)
@@ -57,6 +65,11 @@ func SetupRouter(merchantService merchants.MerchantService, userService users.Us
 		v2Group.POST(CONST_ORDERPROCESSED, orderProcessedHandler.CreateOrderProcessed)
 		v2Group.PUT(CONST_ORDERPROCESSED, orderProcessedHandler.UpdateOrderProcessedByID)
 		v2Group.POST(CONST_ORDERPROCESSED+"/bulk/:userid", orderProcessedHandler.BulkOrderProcessedByUserId)
+
+		v3Group := r.Group(CONST_COMPANY)
+		v3Group.GET(CONST_COMPANY, companyHandler.GetCompanyList)
+
+		//
 	}
 	return r
 }

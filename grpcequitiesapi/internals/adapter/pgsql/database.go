@@ -2,12 +2,15 @@ package pgsql
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
+
 	// "github.com/spf13/viper"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"grpcequitiesapi/internals/adapter/pgsql/entities"
 	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type MySQLDbStore struct {
@@ -29,6 +32,7 @@ func DBConn(dbsconn string) (*gorm.DB, error) {
 	db.AutoMigrate(&entities.OrdersProcessed{})
 	db.AutoMigrate(&entities.Users{})
 	db.AutoMigrate(&entities.Orders{})
+	db.AutoMigrate(&entities.Company{})
 
 	return db, nil
 }

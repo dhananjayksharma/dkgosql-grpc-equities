@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"grpcequitiesapi/internals/adapter/pgsql"
 	"grpcequitiesapi/internals/adapter/pgsql/query"
+
 	// "grpcequitiesapi/internals/dbmigration"
 	"grpcequitiesapi/internals/handlers"
+	"grpcequitiesapi/pkg/v1/models/companies"
 	"grpcequitiesapi/pkg/v1/models/merchants"
 	"grpcequitiesapi/pkg/v1/models/orderprocessed"
 	"grpcequitiesapi/pkg/v1/models/users"
@@ -67,10 +69,11 @@ func startService() {
 
 	db := query.NewMySQLDBStore(dbConnection)
 
+	companyService := companies.NewCompanyService(db)
 	merchantService := merchants.NewMerchantService(db)
 	userService := users.NewUserService(db)
 	orderProcessedService := orderprocessed.NewOrderProcessedService(db, conngRPC)
-	router := handlers.SetupRouter(merchantService, userService, orderProcessedService)
+	router := handlers.SetupRouter(companyService, merchantService, userService, orderProcessedService)
 	serverPort := viper.GetString("CONS_WEB_PORT")
 	log.Printf("API environment :%v", viper.GetString("ENV_RUN_ENV"))
 
