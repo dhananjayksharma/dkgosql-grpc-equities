@@ -85,7 +85,7 @@ func (ms *mySQLDBStore) CreateMerchantMember(ctx context.Context, user *entities
 	result := ms.db.Debug().WithContext(ctx).Create(&user)
 	err := result.Error
 	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate entry") {
+		if strings.Contains(err.Error(), "duplicate key value violates") {
 			_userMsg := fmt.Sprintf(consts.ErrUserAlreadyExists, user.FkCode, user.Email)
 			return &util.BadRequest{ErrMessage: _userMsg}
 		} else {
