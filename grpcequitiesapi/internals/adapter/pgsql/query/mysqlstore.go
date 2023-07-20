@@ -3,6 +3,7 @@ package query
 import (
 	"context"
 	"fmt"
+	"grpcequitiesapi/internals/adapter/pgsql"
 	"grpcequitiesapi/internals/adapter/pgsql/entities"
 	"grpcequitiesapi/internals/consts"
 	"grpcequitiesapi/internals/util"
@@ -14,12 +15,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type mySQLDBStore struct {
-	db *gorm.DB
+type DBStorer interface {
+	DBConn(dbsconn string) (*gorm.DB, error)
 }
 
-func NewMySQLDBStore(db *gorm.DB) MySQLDBStoreAccess {
-	return &mySQLDBStore{db: db}
+type MySQLDBStore struct {
+	db *pgsql.MySQLDbStore
+}
+
+func NewMySQLDBStore(db *pgsql.MySQLDbStore) *MySQLDBStore {
+	return &MySQLDBStore{db: db}
 }
 
 type MySQLDBStoreAccess interface {
@@ -41,17 +46,17 @@ type MySQLDBStoreAccess interface {
 	UpdateOrderProcessedByID(ctx context.Context, orderProcess *entities.OrdersProcessed, updateTypeData map[string]interface{}, orderProcessRequest request.UpdateOrderProcessedInputRequest) error
 }
 
-func (ms *mySQLDBStore) GetOrderProcessedList(ctx context.Context, OrderProcessedData *[]response.OrdersProcessedResponse) error {
+func (ms *MySQLDBStore) GetOrderProcessedList(ctx context.Context, OrderProcessedData *[]response.OrdersProcessedResponse) error {
 
 	return nil
 }
-func (ms *mySQLDBStore) CreateOrderProcessed(ctx context.Context, OrderProcessedData *entities.OrdersProcessed) error {
+func (ms *MySQLDBStore) CreateOrderProcessed(ctx context.Context, OrderProcessedData *entities.OrdersProcessed) error {
 
 	return nil
 }
 
-func (ms *mySQLDBStore) ListOrderProcessedByID(ctx context.Context, orderProcessedData *[]response.OrdersProcessedResponse, userID string) error {
-	result := ms.db.Debug().WithContext(ctx).Model(&response.OrdersProcessedResponse{}).Select("id, user_id, order_id, company_id, quantity, status, order_type, created_dt, updated_dt").Where("user_id=?", userID).Scan(&orderProcessedData)
+func (ms *MySQLDBStore) ListOrderProcessedByID(ctx context.Context, orderProcessedData *[]response.OrdersProcessedResponse, userID string) error {
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&response.OrdersProcessedResponse{}).Select("id, user_id, order_id, company_id, quantity, status, order_type, created_dt, updated_dt").Where("user_id=?", userID).Scan(&orderProcessedData)
 	if result.RowsAffected == 0 {
 		return &util.DataNotFound{ErrMessage: fmt.Sprintf(consts.ErrorOrderDataNotFoundCode, userID)}
 	}
@@ -61,13 +66,13 @@ func (ms *mySQLDBStore) ListOrderProcessedByID(ctx context.Context, orderProcess
 	}
 	return nil
 }
-func (ms *mySQLDBStore) UpdateOrderProcessedByID(ctx context.Context, orderProcess *entities.OrdersProcessed, updateTypeData map[string]interface{}, orderProcessRequest request.UpdateOrderProcessedInputRequest) error {
+func (ms *MySQLDBStore) UpdateOrderProcessedByID(ctx context.Context, orderProcess *entities.OrdersProcessed, updateTypeData map[string]interface{}, orderProcessRequest request.UpdateOrderProcessedInputRequest) error {
 	var updateFields = make(map[string]interface{})
 	for key, val := range updateTypeData {
 		updateFields[key] = val
 	}
 
-	result := ms.db.Debug().WithContext(ctx).Model(&orderProcess).Where("user_id=? AND order_id=? and status=?", orderProcessRequest.UserID, orderProcessRequest.OrderID, consts.OrderPendingtatus).Omit("user_id", "id", "order_id").Updates(updateFields)
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&orderProcess).Where("user_id=? AND order_id=? and status=?", orderProcessRequest.UserID, orderProcessRequest.OrderID, consts.OrderPendingtatus).Omit("user_id", "id", "order_id").Updates(updateFields)
 
 	log.Println("UpdateOrderProcessedByID updated rows: ", result.RowsAffected)
 	err := result.Error
@@ -81,8 +86,8 @@ func (ms *mySQLDBStore) UpdateOrderProcessedByID(ctx context.Context, orderProce
 }
 
 // CreateMerchantMember
-func (ms *mySQLDBStore) CreateMerchantMember(ctx context.Context, user *entities.Users) error {
-	result := ms.db.Debug().WithContext(ctx).Create(&user)
+func (ms *MySQLDBStore) CreateMerchantMember(ctx context.Context, user *entities.Users) error {
+	result := ms.db.DB.Debug().WithContext(ctx).Create(&user)
 	err := result.Error
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate key value violates") {
@@ -97,14 +102,14 @@ func (ms *mySQLDBStore) CreateMerchantMember(ctx context.Context, user *entities
 }
 
 // UpdateMerchantByID
-func (ms *mySQLDBStore) UpdateMerchantByID(ctx context.Context, user *entities.Merchant, updateTypeData map[string]interface{}, code string) error {
+func (ms *MySQLDBStore) UpdateMerchantByID(ctx context.Context, user *entities.Merchant, updateTypeData map[string]interface{}, code string) error {
 
 	var updateFields = make(map[string]interface{})
 	for key, val := range updateTypeData {
 		updateFields[key] = val
 	}
 
-	result := ms.db.Debug().WithContext(ctx).Model(&user).Where("code=?", code).Omit("code", "id").Updates(updateFields)
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&user).Where("code=?", code).Omit("code", "id").Updates(updateFields)
 
 	log.Println("UpdateByID updated rows: ", result.RowsAffected)
 	err := result.Error
@@ -118,8 +123,8 @@ func (ms *mySQLDBStore) UpdateMerchantByID(ctx context.Context, user *entities.M
 }
 
 // CreateMerchant
-func (ms *mySQLDBStore) CreateMerchant(ctx context.Context, merchant *entities.Merchant) error {
-	result := ms.db.Debug().WithContext(ctx).Create(&merchant)
+func (ms *MySQLDBStore) CreateMerchant(ctx context.Context, merchant *entities.Merchant) error {
+	result := ms.db.DB.Debug().WithContext(ctx).Create(&merchant)
 	err := result.Error
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate entry") {
@@ -134,10 +139,10 @@ func (ms *mySQLDBStore) CreateMerchant(ctx context.Context, merchant *entities.M
 }
 
 // ListMerchantByID
-func (ms *mySQLDBStore) ListMerchantByID(ctx context.Context, merchantData *[]response.MerchantResponse, code string) error {
+func (ms *MySQLDBStore) ListMerchantByID(ctx context.Context, merchantData *[]response.MerchantResponse, code string) error {
 
 	log.Println("ListMerchantByID ")
-	result := ms.db.Debug().WithContext(ctx).Model(&response.MerchantResponse{}).Select("code, name, address, status, created_at, updated_at").Where("code=?", code).Scan(&merchantData)
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&response.MerchantResponse{}).Select("code, name, address, status, created_at, updated_at").Where("code=?", code).Scan(&merchantData)
 	if result.RowsAffected == 0 {
 		return &util.DataNotFound{ErrMessage: fmt.Sprintf(consts.ErrorDataNotFoundCode, code)}
 	}
@@ -149,9 +154,9 @@ func (ms *mySQLDBStore) ListMerchantByID(ctx context.Context, merchantData *[]re
 }
 
 // ListMembersByCode
-func (ms *mySQLDBStore) LoginUserByEmailID(ctx context.Context, userData *[]response.UserLoginResponse, queryParams request.LoginUserInputRequest) error {
+func (ms *MySQLDBStore) LoginUserByEmailID(ctx context.Context, userData *[]response.UserLoginResponse, queryParams request.LoginUserInputRequest) error {
 
-	result := ms.db.Debug().WithContext(ctx).Model(&response.UserLoginResponse{}).Select("users.fk_code, users.first_name, users.last_name, users.email, users.mobile, users.password, users.is_active, users.created_at, merchants.name as MerchantName").Joins("left join merchants on merchants.code = users.fk_code").Where("fk_code=? AND users.email=?", queryParams.Code, queryParams.Email).Scan(&userData)
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&response.UserLoginResponse{}).Select("users.fk_code, users.first_name, users.last_name, users.email, users.mobile, users.password, users.is_active, users.created_at, merchants.name as MerchantName").Joins("left join merchants on merchants.code = users.fk_code").Where("fk_code=? AND users.email=?", queryParams.Code, queryParams.Email).Scan(&userData)
 
 	if result.RowsAffected == 0 {
 		return &util.DataNotFound{ErrMessage: fmt.Sprintf(consts.ErrorUserNotFoundCode, queryParams.Code)}
@@ -165,9 +170,9 @@ func (ms *mySQLDBStore) LoginUserByEmailID(ctx context.Context, userData *[]resp
 }
 
 // ListMembersByCode
-func (ms *mySQLDBStore) ListMembersByCode(ctx context.Context, merchant *[]response.MerchantsMembersResponse, queryParams request.QueryMembersInputRequest) error {
+func (ms *MySQLDBStore) ListMembersByCode(ctx context.Context, merchant *[]response.MerchantsMembersResponse, queryParams request.QueryMembersInputRequest) error {
 
-	result := ms.db.Debug().WithContext(ctx).Model(&response.MerchantsMembersResponse{}).Select("users.fk_code, users.first_name, users.last_name, users.email, users.mobile, users.is_active, users.created_at, merchants.name as MerchantName").Joins("left join merchants on merchants.code = users.fk_code").Where("fk_code=?", queryParams.Code).Limit(queryParams.Limit).Offset(queryParams.Skip).Scan(&merchant)
+	result := ms.db.DB.Debug().WithContext(ctx).Model(&response.MerchantsMembersResponse{}).Select("users.fk_code, users.first_name, users.last_name, users.email, users.mobile, users.is_active, users.created_at, merchants.name as MerchantName").Joins("left join merchants on merchants.code = users.fk_code").Where("fk_code=?", queryParams.Code).Limit(queryParams.Limit).Offset(queryParams.Skip).Scan(&merchant)
 	if result.RowsAffected == 0 {
 		return &util.DataNotFound{ErrMessage: fmt.Sprintf(consts.ErrorDataNotFoundCode, queryParams.Code)}
 	}
@@ -179,8 +184,8 @@ func (ms *mySQLDBStore) ListMembersByCode(ctx context.Context, merchant *[]respo
 }
 
 // GetMerchantList
-func (ms *mySQLDBStore) GetMerchantList(ctx context.Context, merchantData *[]response.MerchantResponse) error {
-	result := ms.db.WithContext(ctx).Model(&response.MerchantResponse{}).Select("code,  name, address, status, created_at, updated_at").Find(&merchantData)
+func (ms *MySQLDBStore) GetMerchantList(ctx context.Context, merchantData *[]response.MerchantResponse) error {
+	result := ms.db.DB.WithContext(ctx).Model(&response.MerchantResponse{}).Select("code,  name, address, status, created_at, updated_at").Find(&merchantData)
 	err := result.Error
 	if err != nil {
 		return &util.InternalServer{ErrMessage: err.Error()}

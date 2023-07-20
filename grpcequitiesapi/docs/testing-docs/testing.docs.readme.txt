@@ -1,0 +1,16 @@
+mockgen -destination=mocks/mock_foo.go -package=mocks . Foo
+
+mockgen -destination=mocks/mock_doer.go -package=mocks github.com/sgreben/testing-with-gomock/doer Doer
+
+
+
+mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks . MySQLDBStoreAccess
+
+
+
+
+mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess
+
+
+mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess,DBStorer
+
