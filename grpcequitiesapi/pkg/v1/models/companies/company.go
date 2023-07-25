@@ -1,8 +1,8 @@
 package companies
 
 import (
-	"grpcequitiesapi/internals/adapter/pgsql"
 	"grpcequitiesapi/internals/adapter/pgsql/entities"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
 	"grpcequitiesapi/pkg/v1/models"
 	"grpcequitiesapi/pkg/v1/models/response"
 
@@ -16,10 +16,10 @@ type CompanyService interface {
 }
 
 type companyService struct {
-	db *pgsql.MySQLDbStore
+	db query.MySQLDBStoreAccess
 }
 
-func NewCompanyService(db *pgsql.MySQLDbStore) CompanyService {
+func NewCompanyService(db query.MySQLDBStoreAccess) CompanyService {
 	return &companyService{db: db}
 }
 

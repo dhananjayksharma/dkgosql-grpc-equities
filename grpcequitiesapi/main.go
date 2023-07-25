@@ -6,10 +6,14 @@ import (
 	"flag"
 	"fmt"
 	"grpcequitiesapi/internals/adapter/pgsql"
+	"grpcequitiesapi/internals/adapter/pgsql/query"
 
 	// "grpcequitiesapi/internals/dbmigration"
 	"grpcequitiesapi/internals/handlers"
 	"grpcequitiesapi/pkg/v1/models/companies"
+	"grpcequitiesapi/pkg/v1/models/merchants"
+	"grpcequitiesapi/pkg/v1/models/orderprocessed"
+	"grpcequitiesapi/pkg/v1/models/users"
 	"log"
 	"net/http"
 	"os"
@@ -56,19 +60,18 @@ func startService() {
 	// dbmigration.RunDBMigration(dbMigrationURL, dbstr)
 
 	// connecting database
-	db, err := pgsql.NewDbConnector(dbstr)
+	mySQLDBStore, err := pgsql.NewDbConnector(dbstr)
 	if err != nil {
 		log.Fatalf("MySQL connection error , %v", err)
 	} else {
-		fmt.Printf("dbConnection connected: %v, %T", db, db)
+		fmt.Printf("dbConnection connected: %v, %T", mySQLDBStore, mySQLDBStore)
 	}
-
+	db := query.NewMySQLDBStore(mySQLDBStore.DB)
 	companyService := companies.NewCompanyService(db)
-	// merchantService := merchants.NewMerchantService(db)
-	// userService := users.NewUserService(db)
-	// orderProcessedService := orderprocessed.NewOrderProcessedService(db, conngRPC)
-	// router := handlers.SetupRouter(companyService, merchantService, userService, orderProcessedService)
-	router := handlers.SetupRouter(companyService, nil, nil, nil)
+	merchantService := merchants.NewMerchantService(db)
+	userService := users.NewUserService(db)
+	orderProcessedService := orderprocessed.NewOrderProcessedService(db, conngRPC)
+	router := handlers.SetupRouter(companyService, merchantService, userService, orderProcessedService)
 	serverPort := viper.GetString("CONS_WEB_PORT")
 	log.Printf("API environment :%v", viper.GetString("ENV_RUN_ENV"))
 
