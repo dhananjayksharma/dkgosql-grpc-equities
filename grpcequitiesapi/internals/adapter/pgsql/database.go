@@ -22,14 +22,17 @@ type DBConnector interface {
 }
 
 func NewDbConnector(dbsconn string) (*MySQLDbStore, error) {
-	db, err := DBConn(dbsconn)
+	var connector DBConnector = &dbConnectorImpl{}
+	db, err := connector.DBConn(dbsconn)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	return &MySQLDbStore{DB: db}, nil
 }
 
-func DBConn(dbsconn string) (*gorm.DB, error) {
+type dbConnectorImpl struct{}
+
+func (dc *dbConnectorImpl) DBConn(dbsconn string) (*gorm.DB, error) {
 	fmt.Println("dbsconn :", dbsconn)
 	dbURL := dbsconn
 

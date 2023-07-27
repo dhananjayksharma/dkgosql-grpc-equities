@@ -9,8 +9,17 @@ mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks . MySQLDBStoreAcce
 
 
 
-mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess
+mockgen -destination=mocks/mock_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess
 
 
-mockgen -destination=mocks/mocks_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess,DBStorer
+mockgen -destination=mocks/mock_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess
+mockgen -destination=mocks/mock_dbconnector.go -package=mocks grpcequitiesapi/internals/adapter/pgsql DBConnector
+
+mockgen -destination=mocks/mock_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MerchantService
+
+BY CHATGPT:
+-----------
+mockgen -destination=mocks/mock_mysqlstore.go -package=mocks grpcequitiesapi/internals/adapter/pgsql/query MySQLDBStoreAccess
+mockgen -destination=mocks/mock_dbconnector.go -package=mocks grpcequitiesapi/internals/adapter/pgsql DBConnector
+
 
