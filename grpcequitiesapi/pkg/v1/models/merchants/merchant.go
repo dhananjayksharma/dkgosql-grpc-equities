@@ -33,7 +33,7 @@ func NewMerchantService(db query.MySQLDBStoreAccess) MerchantService {
 }
 
 // UpdateMerchantByID
-func (service merchantService) UpdateMerchantByID(c *gin.Context) (models.Response, error) {
+func (service *merchantService) UpdateMerchantByID(c *gin.Context) (models.Response, error) {
 	var err error
 	// set context
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
@@ -82,7 +82,7 @@ func (service merchantService) UpdateMerchantByID(c *gin.Context) (models.Respon
 }
 
 // CreateMerchant
-func (srv merchantService) CreateMerchant(c *gin.Context) (models.Response, error) {
+func (srv *merchantService) CreateMerchant(c *gin.Context) (models.Response, error) {
 	// set context
 	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()

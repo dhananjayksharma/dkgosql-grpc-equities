@@ -121,7 +121,7 @@ func (service userService) LoginMember(c *gin.Context) (models.Response, error) 
 
 func (service userService) CreateMerchantMember(c *gin.Context) (models.Response, error) {
 	// set context
-	var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+	var ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	var resp = models.Response{}
 

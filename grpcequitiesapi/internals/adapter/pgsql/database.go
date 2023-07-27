@@ -17,8 +17,22 @@ type MySQLDbStore struct {
 	DB *gorm.DB
 }
 
-func DBConn(dbsconn string) (*gorm.DB, error) {
+type DBConnector interface {
+	DBConn(dbsconn string) (*gorm.DB, error)
+}
 
+func NewDbConnector(dbsconn string) (*MySQLDbStore, error) {
+	var connector DBConnector = &dbConnectorImpl{}
+	db, err := connector.DBConn(dbsconn)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return &MySQLDbStore{DB: db}, nil
+}
+
+type dbConnectorImpl struct{}
+
+func (dc *dbConnectorImpl) DBConn(dbsconn string) (*gorm.DB, error) {
 	fmt.Println("dbsconn :", dbsconn)
 	dbURL := dbsconn
 
