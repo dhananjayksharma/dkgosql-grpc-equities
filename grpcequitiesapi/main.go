@@ -60,13 +60,15 @@ func startService() {
 	// dbmigration.RunDBMigration(dbMigrationURL, dbstr)
 
 	// connecting database
-	mySQLDBStore, err := pgsql.NewDbConnector(dbstr)
+	dbConnection, err := pgsql.DBConn(dbstr)
 	if err != nil {
 		log.Fatalf("MySQL connection error , %v", err)
 	} else {
-		fmt.Printf("dbConnection connected: %v, %T", mySQLDBStore, mySQLDBStore)
+		fmt.Printf("dbConnection connected: %v, %T", dbConnection, dbConnection)
 	}
-	db := query.NewMySQLDBStore(mySQLDBStore.DB)
+
+	db := query.NewMySQLDBStore(dbConnection)
+
 	companyService := companies.NewCompanyService(db)
 	merchantService := merchants.NewMerchantService(db)
 	userService := users.NewUserService(db)
