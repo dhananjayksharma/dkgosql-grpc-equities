@@ -3,6 +3,7 @@ module github.com/dhananjayksharma/dkgosql-grpc-equities
 go 1.18
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.3.0
 	github.com/stretchr/testify v1.8.3

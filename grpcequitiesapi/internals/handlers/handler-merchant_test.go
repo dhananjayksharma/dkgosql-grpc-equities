@@ -24,7 +24,7 @@ func TestGetMerchantList(t *testing.T) {
 	beforeEach := func(t *testing.T) {
 		srvMerchant := merchants.NewMerchantService(&query.MockMySQLDBStore{})
 		srvUser := users.NewUserService(&query.MockMySQLDBStore{})
-		router = SetupRouter(srvMerchant, srvUser, nil)
+		router = SetupRouter(nil, srvMerchant, srvUser, nil)
 	}
 	t.Run("get-merchant-list", func(t *testing.T) {
 		beforeEach(t)
@@ -70,7 +70,7 @@ func TestCreateMerchant(t *testing.T) {
 	beforeEach := func(t *testing.T) {
 		srvMerchant := merchants.NewMerchantService(&query.MockMySQLDBStore{})
 		srvUser := users.NewUserService(&query.MockMySQLDBStore{})
-		router = SetupRouter(srvMerchant, srvUser, nil)
+		router = SetupRouter(nil, srvMerchant, srvUser, nil)
 	}
 	t.Run("create-merchant", func(t *testing.T) {
 		beforeEach(t)

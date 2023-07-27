@@ -2,10 +2,5 @@ ENV_VAR_RW: "db_one_readwrite"
 CONS_WEB_PORT: "0.0.0.0:8989"
 ENV_RUN_ENV : "Started service running as " 
 
-database:
-  db_one_readwrite:
-    dbname: "BSE_Equity_Db"
-    dbuser: "root"
-    dbpassword: "root#123PD"
-    hostname: "dkgosql_bseequity_db:3336"
-
+PG_URL : "postgres://postgres:pass@123PGdb@equities.docker.internal:5441/BSE_Equity_Db?sslmode=disable"
+DBMIGRATION_URL : "file://db/migration"
